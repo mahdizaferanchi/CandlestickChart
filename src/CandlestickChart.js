@@ -38,7 +38,7 @@ function CandlestickChart(props) {
 				.catch((error) => {
 					console.log(error)
 				})
-		  }, 5 * 1000);
+		  }, 60 * 1000);
 		  return () => clearInterval(interval);
 	});
 	const getRangeSelected = () => {
