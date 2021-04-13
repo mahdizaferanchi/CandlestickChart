@@ -13,7 +13,7 @@ function CandlestickChart(props) {
 	const timeInterval = useRef(0)
 	useEffect(() => {
 		//initial data load and interval setup
-		if (data.length == 0)
+		if (data.length === 0)
 		axios.get('https://demo-live-data.highcharts.com/aapl-ohlc.json')
 		    .then(function (response) {
 		    	// let alteredData = response.data.map((point, idx, arr) => [arr[0][0] + 60 * 1000 * (idx + 1)].concat(point.slice(1)))
@@ -58,7 +58,7 @@ function CandlestickChart(props) {
 	useEffect(() => {
 		//update or draw chart whenever data changes
 		if (data.length !== 0)
-			if (chart.current == null) {//Highcharts.charts.length <= 
+			if (chart.current === null) {//Highcharts.charts.length <= 
 				chart.current = Highcharts.stockChart(chartEl.current, {
 					plotOptions: {
 				        candlestick: {
@@ -132,7 +132,7 @@ function CandlestickChart(props) {
 				let extremes = chart.current.xAxis[0].getExtremes()
 				let newMax = extremes.dataMax
 				let newMin = extremes.dataMax - (extremes.max - extremes.min)
-				if (oldExtremes.max == oldExtremes.dataMax) {
+				if (oldExtremes.max === oldExtremes.dataMax) {
 					chart.current.xAxis[0].setExtremes(newMin, newMax)
 				}
 				chart.current.hideLoading()
