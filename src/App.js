@@ -2,7 +2,9 @@ import CandlestickChart from './CandlestickChart';
 
 function App() {
   return (
-    <CandlestickChart />
+  	<div>
+	    <CandlestickChart />
+  	</div>
   );
 }
 
