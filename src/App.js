@@ -25,13 +25,16 @@ function App() {
 	// 	    console.log(error);
 	//     })
 	// }, [])
-  return (
-  	<div style={{'display': 'flex'}}>
-	    {/*<CandlestickChart />*/}
-	    <Chart data={data} name={'Sample'} type={'line'}/>
-	    <Chart data={data2} name={'Sample'} type={'column'}/>
-	    <Chart data={data2} name={'Sample'} type={'pie'}/>
-  	</div>
+	const [chartSelector, setChart] = useState(0)
+	const charts = [
+		<Chart data={data} name={'Sample'} type={'line'}/>,
+	    <Chart data={data2} name={'Sample'} type={'column'}/>,
+	    <Chart data={data2} name={'Sample'} type={'pie'}/>]
+	return (
+		<div>
+			{charts[chartSelector]}
+			<button onClick={() => {setChart((chartSelector + 1) % charts.length)}}>show other chart</button>
+		</div>
   );
 }
 
