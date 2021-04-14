@@ -1,10 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import axios from 'axios';
 import Highcharts from 'highcharts/highstock';
-// Load the exporting module.
-import Exporting from 'highcharts/modules/exporting';
-// Initialize exporting module. (CommonJS only)
-Exporting(Highcharts);
 
 function CandlestickChart(props) {
 	const [data, setData] = useState([])
