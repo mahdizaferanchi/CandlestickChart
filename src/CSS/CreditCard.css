@@ -1,0 +1,20 @@
+.card {
+	display: flex;
+	max-width: 900px;
+	justify-content: space-between;
+	padding: 0.25rem;
+	background: #ededed;
+	border-radius: 4px;
+}
+
+.card-item {
+	padding: 0.4rem;
+}
+
+.card-button {
+	font-family: inherit;
+	margin: 0.2rem;
+	border-radius: 7px;
+	padding: 0.2rem;
+	border: 1px black solid;
+}

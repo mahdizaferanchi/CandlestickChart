@@ -1,0 +1,46 @@
+
+.form-input {
+	border-radius: 5px;
+	border: 1px solid black;
+	width: 100%;
+	padding: 0.2rem;
+}
+
+.form {
+	font-size: 1.2rem;
+	margin: 1rem;
+	padding: 0 0.2rem;
+}
+
+.form-label {
+	padding: 0.4rem 0;
+	font-weight: bold;
+	display: flex;
+	margin-top: 1rem;
+}
+
+.radio-values {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	grid-gap: 1rem;
+}
+
+.radio-value {
+	margin-right: 0.25rem;
+}
+
+.form-submit {
+	margin: 0.4rem;
+	display: block;
+}
+
+.error {
+	color: red;
+	max-width: 100%;
+}
+
+.exp-date-input {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-gap: 1rem;
+}

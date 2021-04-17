@@ -12,8 +12,8 @@ function CandlestickChart(props) {
 		if (data.length === 0)
 		axios.get('https://demo-live-data.highcharts.com/aapl-ohlc.json')
 		    .then(function (response) {
-		    	// let alteredData = response.data.map((point, idx, arr) => [arr[0][0] + 60 * 1000 * (idx + 1)].concat(point.slice(1)))
-		    	let alteredData = response.data
+		    	let alteredData = response.data.map((point, idx, arr) => [arr[0][0] + 60 * 1000 * (idx + 1)].concat(point.slice(1)))
+		    	// let alteredData = response.data
 	    		setData(alteredData)
 	    		timeInterval.current = alteredData[1][0] - alteredData[0][0]
 	  		})

@@ -2,7 +2,9 @@ import React, {useState, useEffect, useRef} from 'react';
 import CandlestickChart from './CandlestickChart';
 import StockChart from './StockChart';
 import Chart from './Chart';
-import axios from 'axios'
+import axios from 'axios';
+import UserCCs from './UserCCs';
+import 'normalize.css'
 
 function App() {
   // let dataArr1 = [[1555335000000,49.81],[1555421400000,49.81],[1555507800000,50.78],[1555594200000,50.97],[1555939800000,51.13],[1556026200000,51.87],[1556112600000,51.79],[1556199000000,51.32],[1556285400000,51.08]]
@@ -32,8 +34,10 @@ function App() {
 	    <Chart data={data2} name={'Sample'} type={'pie'}/>]
 	return (
 		<div>
-			{charts[chartSelector]}
-			<button onClick={() => {setChart((chartSelector + 1) % charts.length)}}>show other chart</button>
+			{/*<CandlestickChart />*/}
+			{/*{charts[chartSelector]}*/}
+			{/*{<button onClick={() => {setChart((chartSelector + 1) % charts.length)}}>show other chart</button>}*/}
+			{<UserCCs />}
 		</div>
   );
 }
