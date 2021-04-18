@@ -120,14 +120,15 @@ function UserCCs(props) {
 					صفحه قبل
 			</button>
 			<button 
-				onClick={() => setPage(Math.min(page + 1, Math.floor(cards.length / pageSize)))}>
+				onClick={() => setPage(Math.min(page + 1, Math.floor((cards.length - 1) / pageSize)))}>
 					صحفه بعد
 			</button>
 			<Formik
 				enableReinitialize={true}
 				validate={(values) => {
+					console.log(Math.floor((cards.length - 0.1) / pageSize))
 					if (values.currentPage - 1 < 0 
-						|| values.currentPage - 1 > Math.floor(cards.length / pageSize)) {
+						|| values.currentPage - 1 > Math.floor((cards.length - 0.1) / pageSize)) {
 						return {currentPage: 'error'}
 					}
 				}}
