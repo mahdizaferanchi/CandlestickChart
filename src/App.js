@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState} from 'react';
 import CandlestickChart from './CandlestickChart';
 import StockChart from './StockChart';
 import Chart from './Chart';

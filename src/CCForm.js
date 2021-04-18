@@ -32,6 +32,10 @@ function CCForm(props) {
 			errors.number = 'شماره کارت بانکی باید 16 رقم باشد.'
 		} else if (values.bank && validateCCNumber(values.number, values.bank)) {
 			errors.number = 'شماره کارت بانکی با  بانک انتخاب شده تطابق ندارد.'
+		} else if (!props.checkDuplicateCCnum(values.number)) {
+			if (!props.number || props.number !== values.number) {
+				errors.number = 'شماره کارت تکراری است.'
+			}
 		}
 
 		return errors
@@ -42,7 +46,7 @@ function CCForm(props) {
 			 e.target.nextElementSibling.focus();
 		}
 	}
-
+	const cancel = props.onCancel
 	return(
 		<Formik
 			initialValues={{
@@ -55,6 +59,8 @@ function CCForm(props) {
 			validate={validate}
 			onSubmit={values => {
 					props.onSubmit(values, props.number || 0)
+					if (props.number === values.number)
+						props.onCancel()
 				}}
 		>
 			{props => (
@@ -80,14 +86,14 @@ function CCForm(props) {
 							<div className='error'>{props.errors.bank}</div>
 						}
 						<label className="form-label" htmlFor="number">شماره کارت</label>
-						<Field className='form-input' id="number" name="number"/>
+						<Field className='form-input' dir='ltr' id={"number" + props.initialValues.number} name="number"/>
 						{
 							props.touched.number && props.errors.number &&
 							<div className='error'>{props.errors.number}</div>
 						}
 
 						<label className="form-label" htmlFor="cvv2">cvv2</label>
-						<Field className='form-input' type="password" id="cvv2" name="cvv2"/>
+						<Field className='form-input' dir='ltr' type="password" id={"cvv2" + props.initialValues.number} name="cvv2"/>
 						{
 							props.touched.cvv2 && props.errors.cvv2 &&
 							<div className='error'>{props.errors.cvv2}</div>
@@ -95,8 +101,8 @@ function CCForm(props) {
 
 						<label className="form-label" htmlFor="year">تاریخ انقضا</label>
 						<div className="exp-date-input">
-							<Field className='form-input' id="month" name="month" placeholder="ماه" onInput={(e) => focusChange(e)}/>
-							<Field className='form-input' id="year" name="year" placeholder='سال' />
+							<Field className='form-input' dir='ltr' id={"month" + props.initialValues.number} name="month" placeholder="ماه" onInput={(e) => focusChange(e)}/>
+							<Field className='form-input' dir='ltr' id={"year" + props.initialValues.number} name="year" placeholder='سال' />
 						</div>
 						{
 							props.touched.month && props.errors.month &&
@@ -109,6 +115,9 @@ function CCForm(props) {
 
 						<button className="form-submit" type="submit">ثبت</button>
 					</Form>
+					<button className="form-submit" onClick={() => {
+						cancel()
+					}}>لغو</button>
 				</div>
 			)}
 		</Formik>

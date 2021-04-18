@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official'
 import HC_more from 'highcharts/highcharts-more';
@@ -8,7 +8,7 @@ HC_more(Highcharts);
 //'line', 'spline', 'area', 'areaspline', 'column', 'pie'
 function Chart(props) {
 	const validate = (data) => {
-		let xValType = (typeof(data[0][0]) === 'string') ? 'category' : 'number'
+		// let xValType = (typeof(data[0][0]) === 'string') ? 'category' : 'number'
 		if (!props.data.every((el, idx, arr) => typeof(el[0]) === typeof(arr[0][0]))) {
 			return false
 		}

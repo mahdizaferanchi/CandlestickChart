@@ -1,14 +1,9 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState} from 'react';
 import Dialog from '@material-ui/core/Dialog';
-import Slide from '@material-ui/core/Slide';
 import CreditCard from './CreditCard';
 import CCForm from './CCForm';
 
 function UserCCs(props) {
-
-	const Transition = React.forwardRef(function Transition(props, ref) {
-		return <Slide direction="down" ref={ref} {...props} />;
-	});
 
 	const [open, setOpen] = useState(false);
 	const [cards, setCards] = useState(
@@ -22,6 +17,7 @@ function UserCCs(props) {
 			},
 		]);
 
+	const checkDuplicateCCnum = (num) => cards.filter(card => card.number === num).length === 0	
 	const getCC = cardObj => {
 		return (
 			<CreditCard 
@@ -37,6 +33,7 @@ function UserCCs(props) {
 					let idx = cards.findIndex(el => el.number === id)
 					setCards(cards.slice(0, idx).concat([newCard]).concat(cards.slice(idx + 1)))
 				}}
+				checkDuplicateCCnum={checkDuplicateCCnum}
 				key={cardObj.number}
 			/>)
 	}
@@ -50,13 +47,19 @@ function UserCCs(props) {
 			 <Dialog
 		        open={open}
 		        // TransitionComponent={Transition}
-		        keepMounted
+		        // keepMounted
 		        onClose={() => setOpen(false)}
 		    >
-			    <CCForm onSubmit={(newCard, id) => {
-			    	setCards(cards.concat([newCard]))
-			    	setOpen(false)
-			    }}/>
+			    <CCForm 
+			    	onSubmit={(newCard, id) => {
+				    	setCards(cards.concat([newCard]))
+				    	setOpen(false)
+			    	}}
+			    	onCancel={() => {
+			    		setOpen(false)
+			    	}}
+			    	checkDuplicateCCnum={checkDuplicateCCnum}
+			    />
 		    </Dialog>
 		</div>
 		)

@@ -18,3 +18,7 @@
 	padding: 0.2rem;
 	border: 1px black solid;
 }
+
+.delete-dialog {
+	padding: 0.5rem;
+}
