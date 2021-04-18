@@ -10,32 +10,44 @@ function CandlestickChart(props) {
 	useEffect(() => {
 		//initial data load and interval setup
 		if (data.length === 0)
-		axios.get('https://demo-live-data.highcharts.com/aapl-ohlc.json')
+		// axios.get('https://demo-live-data.highcharts.com/aapl-ohlc.json')
+		axios.get('http://192.168.11.35/processing/list/conv/tBTCUSD/1H/get?from=0')
 		    .then(function (response) {
-		    	let alteredData = response.data.map((point, idx, arr) => [arr[0][0] + 60 * 1000 * (idx + 1)].concat(point.slice(1)))
+		    	// let alteredData = response.data.map((point, idx, arr) => [arr[0][0] + 60 * 1000 * (idx + 1)].concat(point.slice(1)))
+		    	let alteredData = response.data.map((point) => {
+		    		return [point.timestamp, 
+		    			Number(point.open_price), 
+		    			Number(point.high_price), 
+		    			Number(point.low_price), 
+		    			Number(point.close_price)]
+		    	})
 		    	// let alteredData = response.data
+		    	// let alteredData = response.data.map((point) => {
+		    	// 	return [point.timestamp, point.open_price, point.high_price, point.low_price, point.close_price]
+		    	// })
 	    		setData(alteredData)
 	    		timeInterval.current = alteredData[1][0] - alteredData[0][0]
 	  		})
 		    .catch(function (error) {
 			    console.log(error);
 		    })
-	    const interval = setInterval(() => {
-	    	//interval to update chart periodically
-		    chart.current.showLoading()
-		    axios.get('https://demo-live-data.highcharts.com/aapl-ohlc.json')
-				.then((response) => {
-					//put new data after old data
-					let newData = response.data.slice(response.data.length - 3, response.data.length - 2)
-				    let lastTime = data[data.length - 1][0]
-				    newData = newData.map((el, idx) => [lastTime + timeInterval.current * (idx + 1)].concat(el.slice(1)))
-				    setData(data.concat(newData))
-				})
-				.catch((error) => {
-					console.log(error)
-				})
-		  }, 60 * 1000);
-		  return () => clearInterval(interval);
+	    // const interval = setInterval(() => {
+	   //  	interval to update chart periodically
+		  //   chart.current.showLoading()
+		  //   axios.get('https://demo-live-data.highcharts.com/aapl-ohlc.json')
+				// .then((response) => {
+				// 	//put new data after old data
+				// 	// let newData = response.data
+				// 	let newData = response.data.slice(response.data.length - 3, response.data.length - 2)
+				//     let lastTime = data[data.length - 1][0]
+				//     newData = newData.map((el, idx) => [lastTime + timeInterval.current * (idx + 1)].concat(el.slice(1)))
+				//     // setData(data.concat(newData))
+				// })
+				// .catch((error) => {
+				// 	console.log(error)
+				// })
+		  // }, 60 * 1000);
+		  // return () => clearInterval(interval);
 	});
 	const getRangeSelected = () => {
 		let dayInterval = timeInterval.current >= 24 * 60 * 60 * 1000
@@ -95,7 +107,8 @@ function CandlestickChart(props) {
 				        dataGrouping: {
 					        units: [
 					        	['minute',[10]],
-					        	['hour', [1]],
+					        	['hour', [1, 10]],
+					        	['day', [1]],
 					        	['week',[1]], 
 					        	['month', [1, 2, 3, 4, 6]]]
 				        },
@@ -117,9 +130,10 @@ function CandlestickChart(props) {
 				        data: data,
 				        dataGrouping: {
 					        units: [
-					        	['minute', [10]],
-					        	['hour', [1]],
-					        	['week', [1]], 
+					        	['minute',[10]],
+					        	['hour', [1, 10]],
+					        	['day', [1]],
+					        	['week',[1]], 
 					        	['month', [1, 2, 3, 4, 6]]]
 				        }
 			        }]
