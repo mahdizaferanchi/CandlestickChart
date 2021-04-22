@@ -86,6 +86,34 @@ function UserCCs(props) {
 				'year': '02',
 				'month': '12',
 			},
+			{
+				"bank": 'صادرات',
+				"number": '6037691111111122',
+				'cvv2': '2234',
+				'year': '02',
+				'month': '12',
+			},
+			{
+				"bank": 'صادرات',
+				"number": '6037691111111123',
+				'cvv2': '2234',
+				'year': '02',
+				'month': '12',
+			},
+			{
+				"bank": 'صادرات',
+				"number": '6037691111111124',
+				'cvv2': '2234',
+				'year': '02',
+				'month': '12',
+			},
+			{
+				"bank": 'صادرات',
+				"number": '6037691111111125',
+				'cvv2': '2234',
+				'year': '02',
+				'month': '12',
+			},
 		]);
 	const [pageSize, setPageSize] = useState(5)
 	const [page, setPage] = useState(0)
@@ -100,9 +128,9 @@ function UserCCs(props) {
 				cvv2={cardObj.cvv2}
 				year={cardObj.year}
 				month={cardObj.month}
-				onDelete={() => 
+				onDelete={() => {
 					setCards(cards => cards.filter(card => card.number !== cardObj.number))
-				}
+				}}
 				onEdit={(newCard, id) => {
 					let idx = cards.findIndex(el => el.number === id)
 					setCards(cards.slice(0, idx).concat([newCard]).concat(cards.slice(idx + 1)))
@@ -112,14 +140,20 @@ function UserCCs(props) {
 			/>)
 	}
 
+	if (cards.slice(page * pageSize, page * pageSize + pageSize).length === 0) {
+		setPage(page - 1)
+	}
+
 	return(
-		<div dir='rtl' style={{'margin': '1rem'}}>
+		<div dir='rtl' style={{'margin': '1rem auto', 'maxWidth': '1000px'}}>
 			{cards.slice(page * pageSize, page * pageSize + pageSize).map(card => getCC(card))}
 			<button 
+				className='card-button'
 				onClick={() => setPage(Math.max(page - 1, 0))}>
 					صفحه قبل
 			</button>
 			<button 
+				className='card-button'
 				onClick={() => setPage(Math.min(page + 1, Math.floor((cards.length - 1) / pageSize)))}>
 					صحفه بعد
 			</button>
@@ -141,8 +175,8 @@ function UserCCs(props) {
 			>
 				{props => (
 					<Form>
-						<Field type='number' name='currentPage'/>
-						<button type='submit'>برو به صفحه</button>
+						<Field className='card-button' type='number' name='currentPage'/>
+						<button className='card-button' type='submit'>برو به صفحه</button>
 					</Form>
 				)}
 			</Formik>
@@ -163,12 +197,12 @@ function UserCCs(props) {
 			>
 				{props => (
 					<Form>
-						<Field type='number' name='currentPageSize' />
-						<button type='submit'>تغییر اندازه صفحه</button>
+						<Field className='card-button' type='number' name='currentPageSize' />
+						<button className='card-button' type='submit'>تغییر اندازه صفحه</button>
 					</Form>
 				)}
 			</Formik>
-			<button onClick={() => setOpen(true)}>
+			<button className='card-button' onClick={() => setOpen(true)}>
 				افزودن
 			</button>
 			 <Dialog

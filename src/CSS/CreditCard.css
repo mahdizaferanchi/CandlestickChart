@@ -1,6 +1,7 @@
 .card {
+	margin: 0.25rem auto;
 	display: flex;
-	max-width: 900px;
+	/*max-width: 900px;*/
 	justify-content: space-between;
 	padding: 0.25rem;
 	background: #ededed;

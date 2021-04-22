@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import CandlestickChart from './CandlestickChart';
+// import UpdatingCandlestickChart from './UpdatingCandlestickChart';
 import StockChart from './StockChart';
 import Chart from './Chart';
 import axios from 'axios';
@@ -34,10 +35,13 @@ function App() {
 	    <Chart data={data2} name={'Sample'} type={'pie'}/>]
 	return (
 		<div>
-			{/*<CandlestickChart />*/}
-			{/*{charts[chartSelector]}*/}
-			{/*{<button onClick={() => {setChart((chartSelector + 1) % charts.length)}}>show other chart</button>}*/}
-			{<UserCCs />}
+			<CandlestickChart />
+			{/*<UpdatingCandlestickChart />*/}
+			<UserCCs />
+			<div style={{'maxWidth': '1000px', 'margin': '0 auto'}}>
+				{charts[chartSelector]}
+				<button className='card-button' style={{'margin': '5px'}} onClick={() => {setChart((chartSelector + 1) % charts.length)}}>نمایش نمودار بعدی</button>
+			</div>
 		</div>
   );
 }

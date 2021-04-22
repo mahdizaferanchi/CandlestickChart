@@ -3,51 +3,59 @@ import axios from 'axios';
 import Highcharts from 'highcharts/highstock';
 
 function CandlestickChart(props) {
-	const [data, setData] = useState([])
+	const [data, setData] = useState({historic: [], prediction: []})
 	const chart = useRef(null)
 	const chartEl = useRef(null)
 	const timeInterval = useRef(0)
+	Highcharts.setOptions({
+	    global: {
+	        timezoneOffset: new Date().getTimezoneOffset(),
+	    },
+	});
+	const updateData = () => {
+		const historicRequest = axios.get('http://192.168.11.35/processing/list/conv/tBTCUSD/1H/get?from=1545419851000')
+		//1614496763000
+		// const predictionReqest = axios.get('http://192.168.11.34:8080/pricebased/prediction/time/tBTCUSD/1H/1618830000000')
+		const predictionReqest = axios.get('http://192.168.11.34:8080/pricebased/prediction/tBTCUSD/1H/10/')
+		axios.all([historicRequest, predictionReqest]).then(axios.spread((...responses) => {
+			let historicData = responses[0].data.map((point) => {
+	    		return [
+	    			point.timestamp, 
+	    			Number(point.open_price), 
+	    			Number(point.high_price), 
+	    			Number(point.low_price), 
+	    			Number(point.close_price),
+	    		]
+	    	})
+	    	let predictionData = responses[1].data.map((point) => {
+	    		return [
+	    			point.prediction[0].timestamp_predict,
+	    			point.prediction[0].open_prediction,
+	    			point.prediction[0].high_prediction,
+	    			point.prediction[0].low_prediction,
+	    			point.prediction[0].close_prediction,
+	    		]
+	    	})
+	    	predictionData.sort((a, b) => a[0] - b[0])
+	    	historicData.sort((a, b) => a[0] - b[0])
+	    	timeInterval.current = historicData[historicData.length - 1][0] - historicData[historicData.length - 2][0]
+	    	setData({historic: historicData, prediction: []})
+		})).catch((errors) => {
+			console.log(errors)
+		})
+	}
 	useEffect(() => {
 		//initial data load and interval setup
-		if (data.length === 0)
-		// axios.get('https://demo-live-data.highcharts.com/aapl-ohlc.json')
-		axios.get('http://192.168.11.35/processing/list/conv/tBTCUSD/1H/get?from=0')
-		    .then(function (response) {
-		    	// let alteredData = response.data.map((point, idx, arr) => [arr[0][0] + 60 * 1000 * (idx + 1)].concat(point.slice(1)))
-		    	let alteredData = response.data.map((point) => {
-		    		return [point.timestamp, 
-		    			Number(point.open_price), 
-		    			Number(point.high_price), 
-		    			Number(point.low_price), 
-		    			Number(point.close_price)]
-		    	})
-		    	// let alteredData = response.data
-		    	// let alteredData = response.data.map((point) => {
-		    	// 	return [point.timestamp, point.open_price, point.high_price, point.low_price, point.close_price]
-		    	// })
-	    		setData(alteredData)
-	    		timeInterval.current = alteredData[1][0] - alteredData[0][0]
-	  		})
-		    .catch(function (error) {
-			    console.log(error);
-		    })
-	    // const interval = setInterval(() => {
-	   //  	interval to update chart periodically
-		  //   chart.current.showLoading()
-		  //   axios.get('https://demo-live-data.highcharts.com/aapl-ohlc.json')
-				// .then((response) => {
-				// 	//put new data after old data
-				// 	// let newData = response.data
-				// 	let newData = response.data.slice(response.data.length - 3, response.data.length - 2)
-				//     let lastTime = data[data.length - 1][0]
-				//     newData = newData.map((el, idx) => [lastTime + timeInterval.current * (idx + 1)].concat(el.slice(1)))
-				//     // setData(data.concat(newData))
-				// })
-				// .catch((error) => {
-				// 	console.log(error)
-				// })
-		  // }, 60 * 1000);
-		  // return () => clearInterval(interval);
+		if (data.historic.length === 0) {
+			updateData()
+		}
+	 //    const interval = setInterval(() => {
+	 //    	if (chart.current) {
+	 //    		chart.current.showLoading()
+	 //    	}
+	 //    	updateData()
+		// }, 20 * 1000);
+		// return () => clearInterval(interval);
 	});
 	const getRangeSelected = () => {
 		let dayInterval = timeInterval.current >= 24 * 60 * 60 * 1000
@@ -65,18 +73,14 @@ function CandlestickChart(props) {
 
 	useEffect(() => {
 		//update or draw chart whenever data changes
-		if (data.length !== 0)
+		if (data.historic.length !== 0 && data.prediction.length !== 15)
 			if (chart.current === null) {//Highcharts.charts.length <= 
 				chart.current = Highcharts.stockChart(chartEl.current, {
-					plotOptions: {
-				        candlestick: {
-				        	opacity: '0.85',
-				        	color: 'red',
-				            lineColor: 'red',
-				            upLineColor: 'green', // docs
-				            upColor: 'green'
-				        }
-				    },
+				 	plotOptions: {
+    					candlestick: {
+    						grouping: false,
+    					},
+    				},
 			        rangeSelector: {
 			        	buttons: [
 		        			{ type: 'minute', count: 30, text: '30′', title: 'View 30 minutes'},
@@ -93,50 +97,81 @@ function CandlestickChart(props) {
 			        	selected: getRangeSelected(),
 			        },
 			        title: {
-			        	text: 'AAPL Stock Price'
+			        	text: 'Bitcoin Price'
 			        },
 			        loading: {
 				        labelStyle: {
 				        	fontFamily: 'Arial'
 				        }
 				    },
-			        series: [{
-				        type: 'candlestick',
-				        name: 'AAPL Stock Price',
-				        data: data,
-				        dataGrouping: {
-					        units: [
-					        	['minute',[10]],
-					        	['hour', [1, 10]],
-					        	['day', [1]],
-					        	['week',[1]], 
-					        	['month', [1, 2, 3, 4, 6]]]
+				    legend: {
+				    	enabled: true,
+				    },
+			        series: [
+				        {
+				        	maxPointWidth: 16,
+				        	showInLegend: true,
+				        	opacity: '0.85',
+				        	color: 'red',
+				            lineColor: 'red',
+				            upLineColor: 'green', // docs
+				            upColor: 'green',
+					        type: 'candlestick',
+					        name: 'Bitcoin Price',
+					        data: data.historic,
+					        dataGrouping: {
+						        units: [
+						        	['minute',[10]],
+						        	['hour', [1, 2, 10]],
+						        	['day', [1]],
+						        	['week',[1]], 
+						        	['month', [1, 2, 3, 4, 6]]]
+					        },
+					        states: {
+					        	inactive: {
+					        		enabled: false,
+					        	},
+					        },
 				        },
-			        }],
-			        xAxis: {
-			        	// tickInterval: timeInterval.current,
-			        	plotBands: [{
-			        		color: '#f2fffc',
-			        		from: data[data.length - 1] ? (data[data.length - 1][0] + timeInterval.current/2) : 0,
-			        		to: 100000000000000,
-			        	}]
-			        }
+				        {
+				        	maxPointWidth: 12,
+				        	showInLegend: true,
+				        	opacity: '1',
+				        	color: 'black',
+				            lineColor: 'black',
+				            upLineColor: 'blue', // docs
+				            upColor: 'blue',
+					        type: 'candlestick',
+					        name: 'Bitcoin Price Prediction',
+					        data: data.prediction,
+					        dataGrouping: {
+						        units: [
+						        	['minute',[10]],
+						        	['hour', [1, 10]],
+						        	['day', [1]],
+						        	['week',[1]], 
+						        	['month', [1, 2, 3, 4, 6]]]
+					        },
+					        states: {
+					        	inactive: {
+					        		enabled: false,
+					        	},
+					        	hover: {
+					        		enabled: true,
+					        		brightness: 1,
+					        	},
+					        },
+				        },
+			        ],
 			    })
 			} else {
+				console.log('update')
 				let oldExtremes = chart.current.xAxis[0].getExtremes()
 				chart.current.update({
-					series: [{
-				        type: 'candlestick',
-				        data: data,
-				        dataGrouping: {
-					        units: [
-					        	['minute',[10]],
-					        	['hour', [1, 10]],
-					        	['day', [1]],
-					        	['week',[1]], 
-					        	['month', [1, 2, 3, 4, 6]]]
-				        }
-			        }]
+					series: [
+						{data: data.historic},
+						{data: data.prediction},
+			        ]
 				}, true, false, true)
 				//fix scroll position after update
 				let extremes = chart.current.xAxis[0].getExtremes()
@@ -150,8 +185,8 @@ function CandlestickChart(props) {
 	}, [data])
 	
 	return(
-		<div>
-			<div ref={chartEl} style={{'height': '700px', 'minWidth': "310px"}}></div>
+		<div dir='rtl'>
+			<div ref={chartEl} style={{'height': '700px', 'minWidth': "310px", 'maxWidth': "1000px", 'margin': '0 auto'}}></div>
 		</div>
 		);
 }
