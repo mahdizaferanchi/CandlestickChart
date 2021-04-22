@@ -13,10 +13,10 @@ function CandlestickChart(props) {
 	    },
 	});
 	const updateData = () => {
-		const historicRequest = axios.get('http://192.168.11.35/processing/list/conv/tBTCUSD/1H/get?from=1545419851000')
+		const historicRequest = axios.get('http://192.168.11.35/processing/list/conv/tBTCUSD/1H/get?from=1618902000000')
 		//1614496763000
 		// const predictionReqest = axios.get('http://192.168.11.34:8080/pricebased/prediction/time/tBTCUSD/1H/1618830000000')
-		const predictionReqest = axios.get('http://192.168.11.34:8080/pricebased/prediction/tBTCUSD/1H/10/')
+		const predictionReqest = axios.get('http://192.168.11.34:8080/pricebased/prediction/tBTCUSD/1H/20/')
 		axios.all([historicRequest, predictionReqest]).then(axios.spread((...responses) => {
 			let historicData = responses[0].data.map((point) => {
 	    		return [
@@ -39,7 +39,7 @@ function CandlestickChart(props) {
 	    	predictionData.sort((a, b) => a[0] - b[0])
 	    	historicData.sort((a, b) => a[0] - b[0])
 	    	timeInterval.current = historicData[historicData.length - 1][0] - historicData[historicData.length - 2][0]
-	    	setData({historic: historicData, prediction: []})
+	    	setData({historic: historicData, prediction: predictionData})
 		})).catch((errors) => {
 			console.log(errors)
 		})
@@ -107,6 +107,9 @@ function CandlestickChart(props) {
 				    legend: {
 				    	enabled: true,
 				    },
+				    // yAxis: {
+				    // 	labels
+				    // }
 			        series: [
 				        {
 				        	maxPointWidth: 16,
