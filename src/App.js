@@ -1,5 +1,6 @@
 import React from 'react';
 import CandlestickChart from './CandlestickChart';
+import Gauge from './Gauge';
 // import UpdatingCandlestickChart from './UpdatingCandlestickChart';
 // import StockChart from './StockChart';
 // import Chart from './Chart';
@@ -36,6 +37,7 @@ function App() {
 	return (
 		<div>
 			<CandlestickChart />
+			{/*<Gauge />*/}
 			{/*<UpdatingCandlestickChart />*/}
 			{/*<UserCCs />*/}
 			{/*<div style={{'maxWidth': '1000px', 'margin': '0 auto'}}>

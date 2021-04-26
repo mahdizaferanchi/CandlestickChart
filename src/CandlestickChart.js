@@ -114,11 +114,11 @@ function CandlestickChart(props) {
 				        {
 				        	maxPointWidth: 16,
 				        	showInLegend: true,
-				        	opacity: '0.85',
-				        	color: 'red',
-				            lineColor: 'red',
-				            upLineColor: 'green', // docs
-				            upColor: 'green',
+				        	opacity: '1',
+				        	color: '#e00000',
+				            lineColor: '#e00000',
+				            upLineColor: '#3ea873', // docs
+				            upColor: '#3ea873',
 					        type: 'candlestick',
 					        name: 'Bitcoin Price',
 					        data: data.historic,
@@ -139,11 +139,11 @@ function CandlestickChart(props) {
 				        {
 				        	maxPointWidth: 12,
 				        	showInLegend: true,
-				        	opacity: '1',
-				        	color: 'black',
-				            lineColor: 'black',
-				            upLineColor: 'blue', // docs
-				            upColor: 'blue',
+				        	opacity: '0.9',
+				        	color: '#545454',
+				            lineColor: '#545454',
+				            upLineColor: '#a8a8a8', // docs
+				            upColor: '#a8a8a8',
 					        type: 'candlestick',
 					        name: 'Bitcoin Price Prediction',
 					        data: data.prediction,
