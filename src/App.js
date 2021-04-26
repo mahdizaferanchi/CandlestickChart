@@ -1,6 +1,6 @@
 import React from 'react';
 import CandlestickChart from './CandlestickChart';
-import Gauge from './Gauge';
+// import Gauge from './Gauge';
 // import UpdatingCandlestickChart from './UpdatingCandlestickChart';
 // import StockChart from './StockChart';
 // import Chart from './Chart';
